@@ -1265,7 +1265,7 @@ class FullNode:
             if validate_result.error is not None:
                 if validate_result.error == Err.COIN_AMOUNT_NEGATIVE.value:
                     # TODO: remove in the future, hotfix for 1.1.5 peers to not disconnect older peers
-                    self.log.error(f"Consensus error {validate_result.error}, not disconnecting")
+                    self.log.info(f"Consensus error {validate_result.error}, not disconnecting")
                     return
                 raise ConsensusError(Err(validate_result.error))
 
@@ -1589,9 +1589,18 @@ class FullNode:
                         await self.server.send_to_all_except([msg], NodeType.FULL_NODE, peer.peer_node_id)
                 else:
                     self.mempool_manager.remove_seen(spend_name)
-                    self.log.warning(
-                        f"Wasn't able to add transaction with id {spend_name}, " f"status {status} error: {error}"
-                    )
+
+                    # Coin amount negative not logged, due to many clients older than 1.1.5 sending these transactions
+                    if error != Err.DOUBLE_SPEND and error != Err.COIN_AMOUNT_NEGATIVE:
+                        self.log.warning(
+                            f"Wasn't able to add transaction with id {spend_name}, " f"status {status} error: {error}"
+                        )
+                    else:
+                        self.log.info(
+                            f"Wasn't able to add transaction with id {spend_name}, "
+                            f"status {status} "
+                            f"error: {error}"
+                        )
         return status, error
 
     async def _needs_compact_proof(
