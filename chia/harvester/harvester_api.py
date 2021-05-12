@@ -215,7 +215,7 @@ class HarvesterAPI:
             else:
                 pass
                 # If you want additional logs, uncomment the following line
-                # self.harvester.log.debug(f"Looking up qualities on {filename} took: {time.time() - start}")
+                # self.harvester.log.debug(f"Looking up qualities on {filename} took: {time.time() - start}"
             for response in sublist:
                 total_proofs_found += 1
                 msg = make_msg(ProtocolMessageTypes.new_proof_of_space, response)
