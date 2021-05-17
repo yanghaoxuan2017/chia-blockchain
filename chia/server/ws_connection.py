@@ -62,7 +62,6 @@ class WSChiaConnection:
         self.peer_port = connection_port
         self.peer_server_port: Optional[uint16] = None
         self.peer_node_id = peer_id
-
         self.log = log
 
         # connection properties
@@ -102,6 +101,7 @@ class WSChiaConnection:
         # disconnect. Also it allows a little flexibility.
         self.outbound_rate_limiter = RateLimiter(percentage_of_limit=outbound_rate_limit_percent)
         self.inbound_rate_limiter = RateLimiter(percentage_of_limit=inbound_rate_limit_percent)
+        self.version = None
 
     async def perform_handshake(self, network_id: str, protocol_version: str, server_port: int, local_type: NodeType):
         if self.is_outbound:
@@ -126,6 +126,7 @@ class WSChiaConnection:
                 raise ProtocolError(Err.INVALID_HANDSHAKE)
             if inbound_handshake.network_id != network_id:
                 raise ProtocolError(Err.INCOMPATIBLE_NETWORK_ID)
+            self.version = inbound_handshake.software_version
 
             self.peer_server_port = inbound_handshake.server_port
             self.connection_type = NodeType(inbound_handshake.node_type)
@@ -444,6 +445,9 @@ class WSChiaConnection:
             asyncio.create_task(self.close())
             await asyncio.sleep(3)
         return None
+
+    def get_version(self):
+        return self.version
 
     def get_peer_info(self) -> Optional[PeerInfo]:
         result = self.ws._writer.transport.get_extra_info("peername")
