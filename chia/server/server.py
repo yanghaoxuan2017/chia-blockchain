@@ -344,7 +344,7 @@ class ChiaServer:
         connection: Optional[WSChiaConnection] = None
         try:
             # Crawler.
-            timeout = ClientTimeout(total=2)
+            timeout = ClientTimeout(total=5)
             session = ClientSession(timeout=timeout)
 
             try:
