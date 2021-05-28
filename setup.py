@@ -23,7 +23,7 @@ dependencies = [
     "setproctitle==1.2.2",  # Gives the chia processes readable names
     "sortedcontainers==2.3.0",  # For maintaining sorted mempools
     "websockets==8.1.0",  # For use in wallet RPC and electron UI
-    "click@https://github.com/Chia-Network/click/tarball/master#egg=package-1.0",  # For the CLI
+    "click@https://github.com/Chia-Network/click/tarball/main#egg=package-1.0",  # For the CLI
     "pytz==2021.1",
 ]
 
