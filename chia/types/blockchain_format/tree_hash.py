@@ -24,8 +24,8 @@ def sha256_treehash(sexp: CLVMObject, precalculated: Optional[Set[bytes32]] = No
 
     def handle_sexp(sexp_stack, op_stack, precalculated: Set[bytes32]) -> None:
         sexp = sexp_stack.pop()
-        if sexp.pair:
-            p0, p1 = sexp.pair
+        if sexp.as_pair():
+            p0, p1 = sexp.as_pair()
             sexp_stack.append(p0)
             sexp_stack.append(p1)
             op_stack.append(handle_pair)

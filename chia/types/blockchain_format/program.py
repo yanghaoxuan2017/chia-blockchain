@@ -100,10 +100,10 @@ class Program(SExp):
         items = []
         obj = self
         while True:
-            pair = obj.pair
+            pair = obj.as_pair()
             if pair is None:
                 break
-            atom = pair[0].atom
+            atom = pair[0].as_atom()
             if atom is None:
                 break
             items.append(atom)
